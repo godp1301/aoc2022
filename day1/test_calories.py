@@ -24,4 +24,4 @@ def test_double_elves_multiple_snacks():
 
 
 def test_example():
-    assert get_highest_calories(parse_food_list('example.txt')) == 24000
+    assert get_highest_calories(parse_food_list('example.txt')) == 45000

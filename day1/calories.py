@@ -18,7 +18,16 @@ def get_highest_calories(calories_list):
     for item in calories_list:
         all_elves.append(sum(item))
 
-    return max(all_elves)
+    first = max(all_elves)
+    all_elves.remove(first)
+
+    second = max(all_elves)
+    all_elves.remove(second)
+
+    third = max(all_elves)
+    all_elves.remove(third)
+
+    return first + second + third
 
 
 if __name__ == '__main__':
