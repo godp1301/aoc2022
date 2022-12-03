@@ -4,13 +4,8 @@ for i in items:
     values[i] = items.index(i) + 1
 
 
-def get_compartments(items):
-    half = int(len(items) / 2)
-    return items[0:half], items[half:len(items)]
-
-
-def get_common(first_compartment, second_compartment):
-    return [value for value in first_compartment if value in second_compartment][0]
+def get_common(elves):
+    return [value for value in elves[0] if value in elves[1] and value in elves[2]][0]
 
 
 def get_value_of(item):
@@ -18,10 +13,10 @@ def get_value_of(item):
 
 
 def get_priorities_sum(list_of_items):
-    sum = 0
-    for items in list_of_items:
-        a, b = get_compartments(items)
-        sum += get_value_of(get_common(a, b))
+    i, sum = 0, 0
+    for _ in range(int(len(list_of_items)/3)):
+        sum += get_value_of(get_common(list_of_items[i: i+3]))
+        i += 3
 
     return sum
 
