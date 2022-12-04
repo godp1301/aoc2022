@@ -1,3 +1,5 @@
+import os
+
 from day2.rock_paper_scissors import game, calculate
 
 
@@ -20,4 +22,4 @@ def test_draws():
 
 
 def test_example():
-    assert game('example.txt') == 12
+    assert game(f'{os.getcwd()}/day2/example.txt') == 12

@@ -1,3 +1,5 @@
+import os
+
 from day4.assignments import count_pairs_overlapping_others, overlaps
 
 
@@ -18,7 +20,7 @@ def test_second_part_overlaps():
 
 
 def test_example():
-    with open('example.txt', 'r') as file:
+    with open(f'{os.getcwd()}/day4/example.txt', 'r') as file:
         puzzle = [line[:-1] for line in file.readlines()]
 
     assert count_pairs_overlapping_others(puzzle) == 4

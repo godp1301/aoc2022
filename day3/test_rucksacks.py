@@ -1,3 +1,5 @@
+import os
+
 from day3.rucksacks import get_common, get_value_of, get_priorities_sum
 
 
@@ -14,7 +16,7 @@ def test_lower_case_value():
 
 
 def test_example():
-    with open('example.txt', 'r') as file:
+    with open(f'{os.getcwd()}/day3/example.txt', 'r') as file:
         puzzle = [line[:-1] for line in file.readlines()]
 
     assert get_priorities_sum(puzzle) == 70
