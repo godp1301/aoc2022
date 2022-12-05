@@ -2,9 +2,13 @@ import re
 
 
 def move(stacks, quantity, source, destination):
+    boxes = []
     for _ in range(quantity):
-        stacks[destination].append(stacks[source].pop())
+        boxes.append(stacks[source].pop())
 
+    boxes.reverse()
+    for b in boxes:
+        stacks[destination].append(b)
     return stacks
 
 

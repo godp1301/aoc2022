@@ -12,7 +12,7 @@ def test_move_two_from_a_to_b():
     stacks = [['X', 'Y'], ['Z']]
     new_arrangement = move(stacks, 2, 0, 1)
     assert new_arrangement[0] == []
-    assert new_arrangement[1] == ['Z', 'Y', 'X']
+    assert new_arrangement[1] == ['Z', 'X', 'Y']
 
 
 def test_example():
@@ -22,4 +22,4 @@ def test_example():
         ['P']
     ]
 
-    assert process(stacks, ['move 1 from 2 to 1\n', 'move 3 from 1 to 3\n', 'move 2 from 2 to 1\n', 'move 1 from 1 to 2\n']) == 'CMZ'
+    assert process(stacks, ['move 1 from 2 to 1\n', 'move 3 from 1 to 3\n', 'move 2 from 2 to 1\n', 'move 1 from 1 to 2\n']) == 'MCD'
