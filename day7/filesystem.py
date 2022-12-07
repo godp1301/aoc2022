@@ -83,9 +83,41 @@ def get_total_usage_for_directories_smaller_than_100k():
     return total_size
 
 
+def get_needed_space():
+    current_disk_usage = get_usage('/')
+    unused_space = 70000000 - current_disk_usage
+    return 30000000 - unused_space
+
+
+def get_deletion_candidates(needed_space):
+    candidates = []
+    current_folder_size, total_size = 0, 0
+    for f in rfs.expand_tree('/'):
+        n = rfs.get_node(f)
+        if n.fpointer:
+            current_folder_size = get_usage(n.identifier)
+            if current_folder_size > needed_space:
+                candidates.append(n.identifier)
+
+    return candidates
+
+
+def get_folder_size_to_be_deleted(candidates, needed_space):
+    usages = []
+    for c in candidates:
+        usages.append(get_usage(c))
+
+    usages.sort()
+    for u in usages:
+        if u >= needed_space:
+            return u
+
+
 if __name__ == '__main__':
     with open('input.txt', 'r') as file:
         puzzle = [line[:-1] for line in file.readlines()]
 
     process_terminal_history(puzzle)
     print(get_total_usage_for_directories_smaller_than_100k())
+    needed_space = get_needed_space()
+    print(get_folder_size_to_be_deleted(get_deletion_candidates(needed_space), needed_space))

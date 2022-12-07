@@ -1,7 +1,8 @@
 import treelib
 
 from day7.filesystem import get_initial_rfs, process_terminal_history, get_usage, \
-    get_total_usage_for_directories_smaller_than_100k, get_current_node
+    get_total_usage_for_directories_smaller_than_100k, get_current_node, get_needed_space, get_deletion_candidates, \
+    get_folder_size_to_be_deleted
 
 
 def test_get_initial_rfs():
@@ -51,3 +52,17 @@ def test_example():
     print(process_terminal_history(puzzle))
     assert get_usage('/') == 48381165
     assert get_total_usage_for_directories_smaller_than_100k() == 95437
+
+
+def test_example_space_needed():
+    with open('example.txt', 'r') as file:
+        puzzle = [line[:-1] for line in file.readlines()]
+
+    print(process_terminal_history(puzzle))
+    needed_space = get_needed_space()
+    assert needed_space == 8381165
+    candidates = get_deletion_candidates(needed_space)
+    assert '/' in candidates
+    assert '/d' in candidates
+
+    assert get_folder_size_to_be_deleted(candidates, needed_space) == 24933642
