@@ -3,48 +3,62 @@ def survey(forest):
 
 
 def top_neighbors(forest, x, y):
-    top = []
-    for i in range(0, x):
-        top.append(forest[i][y])
-    return top
+    visible = []
+    for t in reversed([forest[i][y] for i in range(0, x)]):
+        if t >= forest[x][y]:
+            visible.append(t)
+            break
+        else:
+            visible.append(t)
+    return visible
 
 
 def bottom_neighbors(forest, x, y):
-    bottom = []
-    for i in range(x + 1, len(forest[y])):
-        bottom.append(forest[i][y])
-    return bottom
+    visible = []
+    for t in [forest[i][y] for i in range(x + 1, len(forest[y]))]:
+        if t >= forest[x][y]:
+            visible.append(t)
+            break
+        else:
+            visible.append(t)
+    return visible
 
 
 def left_neighbors(forest, x, y):
-    return forest[x][0:y]
+    left = []
+    for t in reversed(forest[x][0:y]):
+        if t >= forest[x][y]:
+            left.append(t)
+            break
+        else:
+            left.append(t)
+    return left
 
 
 def right_neighbors(forest, x, y):
-    return forest[x][y + 1: len(forest[x])]
+    right = []
+    for t in forest[x][y + 1: len(forest[x])]:
+        if t >= forest[x][y]:
+            right.append(t)
+            break
+        else:
+            right.append(t)
+    return right
 
 
-def is_visible(forest, x, y):
-    neighbors = [top_neighbors(forest, x, y),
-                 bottom_neighbors(forest, x, y),
-                 left_neighbors(forest, x, y),
-                 right_neighbors(forest, x, y)]
-
-    if [] in neighbors:
-        return True
-    else:
-        visible = []
-        for n in neighbors:
-            visible.append(list(filter(lambda h: h >= forest[x][y], n)))
-        return [] in visible
+def scenic_score(forest, x, y):
+    return len(top_neighbors(forest, x, y)) * len(bottom_neighbors(forest, x, y)) * \
+        len(left_neighbors(forest, x, y)) * len(right_neighbors(forest, x, y))
 
 
 def walk(forest):
-    sum = 0
+    score = 0
     for i, r in enumerate(forest):
         for j, c in enumerate(r):
-            sum += is_visible(forest, i, j)
-    return sum
+            x = scenic_score(forest, i, j)
+            if x > score:
+                score = x
+    return score
 
 
 if __name__ == '__main__':
