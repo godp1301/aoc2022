@@ -1,80 +1,84 @@
-head = [0, 0]
-tail = [0, 0]
+previous_knot = [0, 0]
+current_knot = [0, 0]
+rope = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
 visited_location = [[0, 0]]
 
 
 def get_head_position():
-    global head
-    return head
+    global rope
+    return rope[0]
 
 
 def get_tail_position():
-    global head
-    return tail
+    global rope
+    return rope[-1]
 
 
-def is_tail_too_far(head, tail):
+def get_rope_position():
+    global rope
+    return rope
+
+
+def is_following_knot_too_far(head, tail):
     return abs(head[0] - tail[0]) >= 2 or abs(head[1] - tail[1]) >= 2
 
 
 def move(movement):
-    print(movement)
-    global head, visited_location
+    global rope, visited_location
     direction, distance = movement.split(' ')
 
     if direction == 'R':
         for _ in range(int(distance)):
-            head[0] += 1
-            if is_tail_too_far(head, tail):
-                move_tail()
-            show_movement()
+            rope[0][0] += 1
+            move_all_knots(rope)
     if direction == 'L':
         for _ in range(int(distance)):
-            head[0] -= 1
-            if is_tail_too_far(head, tail):
-                move_tail()
-            show_movement()
+            rope[0][0] -= 1
+            move_all_knots(rope)
     if direction == 'U':
         for _ in range(int(distance)):
-            head[1] += 1
-            if is_tail_too_far(head, tail):
-                move_tail()
-            show_movement()
+            rope[0][1] += 1
+            move_all_knots(rope)
     if direction == 'D':
         for _ in range(int(distance)):
-            head[1] -= 1
-            if is_tail_too_far(head, tail):
-                move_tail()
-            show_movement()
+            rope[0][1] -= 1
+            move_all_knots(rope)
 
-    return head, tail
+    return rope
 
 
-def move_tail():
-    global head, tail
-    if head[0] > tail[0] and head[1] == tail[1]:  # head is right of tail
-        tail[0] += 1
-    elif head[0] < tail[0] and head[1] == tail[1]:  # head is right of tail
-        tail[0] -= 1
-    elif head[1] > tail[1] and head[0] == tail[0]:  # head is top of tail
-        tail[1] += 1
-    elif head[1] < tail[1] and head[0] == tail[0]:  # head is down of tail
-        tail[1] -= 1
-    elif head[1] > tail[1] and head[0] > tail[0]:  # head is top right up of tail
-        tail[0] += 1
-        tail[1] += 1
-    elif head[1] > tail[1] and head[0] < tail[0]:  # head is top left up of tail
-        tail[0] -= 1
-        tail[1] += 1
-    elif head[1] < tail[1] and head[0] > tail[0]:  # head is bottom right down of tail
-        tail[0] += 1
-        tail[1] -= 1
-    elif head[1] < tail[1] and head[0] < tail[0]:  # head is bottom left down of tail
-        tail[0] -= 1
-        tail[1] -= 1
+def move_all_knots(rope):
+    for index in range(1, len(rope)):
+        if is_following_knot_too_far(rope[index - 1], rope[index]):
+            move_knot(rope[index - 1], rope[index], index == len(rope) - 1)
+    show_movement()
 
-    if [tail[0], tail[1]] not in visited_location:
-        visited_location.append([tail[0], tail[1]])
+
+def move_knot(previous_knot, current_knot, is_tail):
+    if previous_knot[0] > current_knot[0] and previous_knot[1] == current_knot[1]:  # head is right of tail
+        current_knot[0] += 1
+    elif previous_knot[0] < current_knot[0] and previous_knot[1] == current_knot[1]:  # head is right of tail
+        current_knot[0] -= 1
+    elif previous_knot[1] > current_knot[1] and previous_knot[0] == current_knot[0]:  # head is top of tail
+        current_knot[1] += 1
+    elif previous_knot[1] < current_knot[1] and previous_knot[0] == current_knot[0]:  # head is down of tail
+        current_knot[1] -= 1
+    elif previous_knot[1] > current_knot[1] and previous_knot[0] > current_knot[0]:  # head is top right up of tail
+        current_knot[0] += 1
+        current_knot[1] += 1
+    elif previous_knot[1] > current_knot[1] and previous_knot[0] < current_knot[0]:  # head is top left up of tail
+        current_knot[0] -= 1
+        current_knot[1] += 1
+    elif previous_knot[1] < current_knot[1] and previous_knot[0] > current_knot[0]:  # head is bottom right down of tail
+        current_knot[0] += 1
+        current_knot[1] -= 1
+    elif previous_knot[1] < current_knot[1] and previous_knot[0] < current_knot[0]:  # head is bottom left down of tail
+        current_knot[0] -= 1
+        current_knot[1] -= 1
+
+    if is_tail:
+        if [current_knot[0], current_knot[1]] not in visited_location:
+            visited_location.append([current_knot[0], current_knot[1]])
 
 
 def number_of_unique_location_visited():
@@ -83,7 +87,7 @@ def number_of_unique_location_visited():
 
 
 def show_movement():
-    print(f'H: {head[0]},{head[1]} T: {tail[0]},{tail[1]}')
+    print(f'H: {previous_knot[0]},{previous_knot[1]} T: {current_knot[0]},{current_knot[1]}')
 
 
 if __name__ == '__main__':
