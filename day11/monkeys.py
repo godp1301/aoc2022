@@ -1,16 +1,17 @@
-from collections import deque
-from math import floor
-
 from day11.monkey import Monkey
 
 
 def play(monkeys, rounds):
+    magic = 1
+    for m in monkeys:
+        magic = magic * m.test
+
     for r in range(rounds):
         for m in monkeys:
             for item in m.items:
                 m.inspection_count += 1
                 m.worry = m.operation(item)
-                m.worry = int(floor(m.worry / 3))
+                m.worry %= magic
 
                 if m.worry % m.test == 0:
                     monkeys[m.true].items.append(m.worry)
@@ -29,8 +30,8 @@ if __name__ == '__main__':
         Monkey([69, 72, 63, 60, 72, 52, 63, 78], lambda w: w * 13, 19, 1, 7),
         Monkey([89, 73], lambda w: w + 5, 17, 2, 0),
         Monkey([78, 68, 98, 88, 66], lambda w: w + 6, 11, 2, 5),
-        Monkey([70], lambda w: w + 7, 5, 1, 3),
+        Monkey([70], lambda w: w + 7, 5, 1, 3)
     ]
-    play(monkeys, 20)
+    play(monkeys, 10000)
     monkeys.sort(key=lambda m: m.inspection_count)
     print(monkeys[-1].inspection_count * monkeys[-2].inspection_count)

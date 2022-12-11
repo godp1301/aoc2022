@@ -34,4 +34,10 @@ def test_example_round_20():
 
     example_monkeys.sort(key=lambda m: m.inspection_count)
     assert example_monkeys[-1].inspection_count * example_monkeys[-2].inspection_count == 10605
-    
+
+
+def test_example_round_10000():
+    play(example_monkeys, 10000)
+
+    example_monkeys.sort(key=lambda m: m.inspection_count)
+    assert example_monkeys[-1].inspection_count * example_monkeys[-2].inspection_count == 2713310158
