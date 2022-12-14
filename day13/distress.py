@@ -1,3 +1,6 @@
+from functools import cmp_to_key
+
+
 def compare(l, r):
     if type(l) == int and type(r) == int:
         if l < r:
@@ -30,13 +33,14 @@ def compare(l, r):
 if __name__ == '__main__':
     is_right_ordered_packets = []
     with open('input.txt', 'r') as file:
-        transmission = [line[:-1] for line in file.readlines()]
+        transmission = [eval(line[:-1]) for line in file.readlines() if line != '\n']
 
-    for i in range(0, len(transmission), 3):
-        is_right_ordered_packets.append(compare(eval(transmission[i]), eval(transmission[i + 1])))
+    transmission.append([[2]])
+    transmission.append([[6]])
 
-    sum = 0
-    for i, v in enumerate(is_right_ordered_packets):
-        if v == -1:
-            sum += i + 1
-    print(sum)
+    decoder_key = 1
+    transmission = sorted(transmission, key=cmp_to_key(lambda l, r: compare(l, r)))
+    for i, p in enumerate(transmission):
+        if p == [[2]] or p == [[6]]:
+            decoder_key *= i + 1
+    print(decoder_key)
